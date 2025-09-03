@@ -11,3 +11,9 @@ SELECT * FROM Orders
 JOIN OrderItems ON Orders.OrderId = OrderItems.OrderId
 JOIN MenuItems ON OrderItems.ItemId = MenuItems.ItemId 
 WHERE ReservationId = 280;
+
+-- Part: 4
+SELECT * FROM MenuItems 
+JOIN OrderItems ON MenuItems.ItemId = OrderItems.ItemId
+JOIN Orders ON Orders.OrderId  = OrderItems.OrderId  
+WHERE ReservationId = 280;
