@@ -23,3 +23,28 @@ SELECT E.EmployeeId, E.FirstName, AVG(O.TotalAmount) [Average Order Amount]
 FROM Employees E
 JOIN Orders O ON E.EmployeeId = O.EmployeeId
 GROUP BY E.EmployeeId, E.FirstName;
+
+-- Part: 6
+DROP VIEW ReservationsReportView;
+CREATE VIEW ReservationsReportView AS
+SELECT
+    R.ReservationId,
+    R.ReservationDate,
+    R.PartySize,
+    C.CustomerId, 
+    C.FirstName, 
+    C.LastName, 
+    C.Email, 
+    C.PhoneNumber AS [Customer Phone],
+    Res.RestaurantId, 
+    Res.Name, 
+    Res.Address, 
+    Res.PhoneNumber AS [Restaurant Phone],
+    Res.OpeningHours 
+FROM Reservations R
+JOIN Customers C ON R.CustomerId = C.CustomerId
+JOIN Restaurants Res ON R.RestaurantId = Res.RestaurantId;
+
+SELECT * 
+FROM ReservationsReportView
+ORDER BY ReservationDate;
