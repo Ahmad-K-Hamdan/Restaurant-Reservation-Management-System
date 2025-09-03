@@ -80,3 +80,10 @@ SELECT * FROM ReservationsOrders RO
 JOIN Reservations R ON RO.ReservationId = R.ReservationId
 WHERE ro.NumOrders >= 2
 ORDER BY ro.NumOrders DESC;
+
+-- Part: 9
+SELECT RES.RestaurantId, RES.Name, COUNT(*) [Number of Reservations],
+    DENSE_RANK() OVER (ORDER BY COUNT(*)) AS [Number of Reservations Rank]
+FROM Restaurants RES
+JOIN Reservations R ON RES.RestaurantId = R.RestaurantId
+GROUP BY RES.RestaurantId, RES.Name;
