@@ -68,3 +68,15 @@ JOIN Restaurants Res ON E.RestaurantId = Res.RestaurantId;
 SELECT * 
 FROM EmployeesReportView
 ORDER BY RestaurantId
+
+-- Part: 8
+WITH ReservationsOrders AS (
+    SELECT ReservationId, COUNT(OrderId) AS NumOrders
+    FROM Orders
+    GROUP BY ReservationId
+)
+
+SELECT * FROM ReservationsOrders RO
+JOIN Reservations R ON RO.ReservationId = R.ReservationId
+WHERE ro.NumOrders >= 2
+ORDER BY ro.NumOrders DESC;
