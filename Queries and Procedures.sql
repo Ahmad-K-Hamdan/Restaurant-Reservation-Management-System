@@ -17,3 +17,9 @@ SELECT * FROM MenuItems
 JOIN OrderItems ON MenuItems.ItemId = OrderItems.ItemId
 JOIN Orders ON Orders.OrderId  = OrderItems.OrderId  
 WHERE ReservationId = 280;
+
+-- Part: 5
+SELECT E.EmployeeId, E.FirstName, AVG(O.TotalAmount) [Average Order Amount]
+FROM Employees E
+JOIN Orders O ON E.EmployeeId = O.EmployeeId
+GROUP BY E.EmployeeId, E.FirstName;
