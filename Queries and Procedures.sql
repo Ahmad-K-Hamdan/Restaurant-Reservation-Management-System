@@ -87,3 +87,19 @@ SELECT RES.RestaurantId, RES.Name, COUNT(*) [Number of Reservations],
 FROM Restaurants RES
 JOIN Reservations R ON RES.RestaurantId = R.RestaurantId
 GROUP BY RES.RestaurantId, RES.Name;
+
+-- Part: 10
+WITH ItemFrequency AS (
+    SELECT R.RestaurantId, MI.ItemId, MI.Name, SUM(Quantity) [Times Ordered],
+        ROW_NUMBER() OVER (PARTITION BY R.RestaurantId ORDER BY SUM(OI.Quantity) DESC) AS ranking
+    FROM MenuItems MI
+    JOIN OrderItems OI ON MI.ItemId = OI.ItemId
+    JOIN Restaurants R ON MI.RestaurantId = R.RestaurantId
+    JOIN Orders O ON OI.OrderId = O.OrderId
+    WHERE MONTH(O.OrderDate) = 10 
+    GROUP BY R.RestaurantId, MI.ItemId, MI.Name
+)
+
+SELECT *
+FROM ItemFrequency
+WHERE ranking = 1;
