@@ -48,3 +48,23 @@ JOIN Restaurants Res ON R.RestaurantId = Res.RestaurantId;
 SELECT * 
 FROM ReservationsReportView
 ORDER BY ReservationDate;
+
+-- Part: 7
+DROP VIEW EmployeesReportView;
+CREATE VIEW EmployeesReportView AS
+SELECT 
+    E.EmployeeId,
+    E.FirstName,
+    E.LastName,
+    E.Position,
+    Res.RestaurantId,
+    Res.Name,
+    Res.Address,
+    Res.PhoneNumber,
+    Res.OpeningHours
+FROM Employees E
+JOIN Restaurants Res ON E.RestaurantId = Res.RestaurantId;
+
+SELECT * 
+FROM EmployeesReportView
+ORDER BY RestaurantId
