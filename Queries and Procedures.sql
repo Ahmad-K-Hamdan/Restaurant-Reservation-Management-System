@@ -103,3 +103,21 @@ WITH ItemFrequency AS (
 SELECT *
 FROM ItemFrequency
 WHERE ranking = 1;
+
+-- Part: 11
+CREATE FUNCTION CalculateResRevenue (@RestaurantId INT)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    DECLARE @Total DECIMAL(10,2);
+
+    SELECT @Total = SUM(O.TotalAmount)
+    FROM Orders O
+    JOIN Reservations R ON O.ReservationId = R.ReservationId
+    JOIN Restaurants RES ON R.RestaurantId = RES.RestaurantId
+    WHERE RES.RestaurantId = @RestaurantId;
+
+    RETURN ISNULL(@Total, 0);
+END;
+
+SELECT dbo.CalculateResRevenue(10) AS [Total Restaurant Revenue];
