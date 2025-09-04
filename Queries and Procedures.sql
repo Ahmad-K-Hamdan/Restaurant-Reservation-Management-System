@@ -149,3 +149,14 @@ BEGIN
 END;
 
 SELECT dbo.fn_CalculateEmployeeSalary(10) AS [Employee's Salary];
+
+-- Part: 13
+CREATE PROCEDURE sp_ResrvedTablesReport @StartDate DATETIME, @EndDate DATETIME
+AS
+BEGIN
+    SELECT * FROM RestaurantTables RT
+    JOIN Reservations R ON RT.TableId = R.TableId
+    WHERE R.ReservationDate >= @StartDate AND R.ReservationDate <= @EndDate
+END;
+
+EXEC sp_ResrvedTablesReport @StartDate = '2025-09-04', @EndDate = '2025-09-5';
