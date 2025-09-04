@@ -105,7 +105,7 @@ FROM ItemFrequency
 WHERE ranking = 1;
 
 -- Part: 11
-CREATE FUNCTION CalculateResRevenue (@RestaurantId INT)
+CREATE FUNCTION fn_CalculateRevenue (@RestaurantId INT)
 RETURNS DECIMAL(10,2)
 AS
 BEGIN
@@ -120,4 +120,4 @@ BEGIN
     RETURN ISNULL(@Total, 0);
 END;
 
-SELECT dbo.CalculateResRevenue(10) AS [Total Restaurant Revenue];
+SELECT dbo.fn_CalculateRevenue(10) AS [Total Restaurant Revenue];
