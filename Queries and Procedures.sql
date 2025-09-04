@@ -186,3 +186,28 @@ EXEC sp_AddNewOrder 101, 5, '2025-04-01 18:30:00', 120.50;
 
 SELECT * FROM Orders
 WHERE ReservationId = 101 and EmployeeId = 5;
+
+-- Part: 15
+CREATE PROCEDURE sp_FutureReservedTablesReport
+AS
+BEGIN
+    CREATE TABLE #FutureTables (
+        TableId INT,
+        RestaurantId INT,
+        ReservationId INT,
+        Capacity INT,
+        ReservationDate DATETIME
+    );
+
+    INSERT INTO #FutureTables
+    SELECT RT.TableId, RT.RestaurantId, R.ReservationId, RT.Capacity, R.ReservationDate 
+    FROM RestaurantTables RT
+    JOIN Reservations R ON RT.TableId = R.TableId
+    WHERE R.ReservationDate > GETDATE()
+    ORDER BY R.ReservationDate;
+
+    SELECT * FROM #FutureTables FT
+    JOIN Restaurants R ON FT.RestaurantId = R.RestaurantId;
+END;
+
+EXEC sp_FutureReservedTablesReport;
