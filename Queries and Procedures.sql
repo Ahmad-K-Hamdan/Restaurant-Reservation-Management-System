@@ -211,3 +211,27 @@ BEGIN
 END;
 
 EXEC sp_FutureReservedTablesReport;
+
+-- Part: 16
+CREATE TABLE AuditLog (
+    AuditId INT IDENTITY(1,1) PRIMARY KEY,
+    RestaurantId INT NOT NULL,
+    TableId INT NOT NULL,
+    ReservationDate DATETIME NOT NULL,
+    ChangeDate DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+CREATE TRIGGER trg_ReservationInsert
+ON Reservations
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO AuditLog (RestaurantId, TableId, ReservationDate)
+    SELECT RestaurantId, TableId, ReservationDate
+    FROM inserted;
+END;
+
+INSERT INTO Reservations 
+VALUES (41, 22, 35, '2025-09-10 11:30', 40);
+
+SELECT * FROM AuditLog;
