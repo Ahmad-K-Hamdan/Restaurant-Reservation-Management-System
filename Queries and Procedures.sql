@@ -235,3 +235,6 @@ INSERT INTO Reservations
 VALUES (41, 22, 35, '2025-09-10 11:30', 40);
 
 SELECT * FROM AuditLog;
+
+-- Part: 17
+-- Done
