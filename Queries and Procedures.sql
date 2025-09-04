@@ -121,3 +121,31 @@ BEGIN
 END;
 
 SELECT dbo.fn_CalculateRevenue(10) AS [Total Restaurant Revenue];
+
+-- Part: 12
+DROP FUNCTION fn_CalculateEmployeeSalary;
+CREATE FUNCTION fn_CalculateEmployeeSalary (@EmployeeId INT)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @Salary INT;
+    DECLARE @Rank INT;
+
+    IF EXISTS (SELECT 1 FROM Employees WHERE EmployeeId = @EmployeeId AND Position = 'Manager')
+        SET @Rank = 5;
+    ELSE IF EXISTS (SELECT 1 FROM Employees WHERE EmployeeId = @EmployeeId AND Position = 'Chef')
+        SET @Rank = 4;
+    ELSE IF EXISTS (SELECT 1 FROM Employees WHERE EmployeeId = @EmployeeId AND Position = 'Waiter')
+        SET @Rank = 3;
+    ELSE IF EXISTS (SELECT 1 FROM Employees WHERE EmployeeId = @EmployeeId AND Position = 'Host')
+        SET @Rank = 2;
+
+    SELECT @Salary = COUNT(O.TotalAmount) * @Rank
+    FROM Employees E
+    JOIN Orders O ON O.EmployeeId = E.EmployeeId
+    WHERE E.EmployeeId = @EmployeeId;
+
+    RETURN ISNULL(@Salary, 0);
+END;
+
+SELECT dbo.fn_CalculateEmployeeSalary(10) AS [Employee's Salary];
