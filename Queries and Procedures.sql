@@ -160,3 +160,29 @@ BEGIN
 END;
 
 EXEC sp_ResrvedTablesReport @StartDate = '2025-09-04', @EndDate = '2025-09-5';
+
+-- Part: 14
+CREATE PROCEDURE sp_AddNewOrder 
+    @ReservationId INT, @EmployeeId INT, @OrderDate DATETIME, @TotalAmount DECIMAL(10,2)
+AS
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM Reservations WHERE ReservationId = @ReservationId)
+        BEGIN
+            RAISERROR('Invalid ReservationId: %d', 16, 1, @ReservationId);
+            RETURN;
+        END;
+
+    IF NOT EXISTS (SELECT 1 FROM Employees WHERE EmployeeId = @EmployeeId)
+        BEGIN
+            RAISERROR('Invalid EmployeeId: %d', 16, 1, @EmployeeId);
+            RETURN;
+        END;
+
+    INSERT INTO Orders
+    VALUES (@ReservationId, @EmployeeId, @OrderDate, @TotalAmount);
+END;
+
+EXEC sp_AddNewOrder 101, 5, '2025-04-01 18:30:00', 120.50;
+
+SELECT * FROM Orders
+WHERE ReservationId = 101 and EmployeeId = 5;
